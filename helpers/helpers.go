@@ -4,6 +4,7 @@ import (
 	"encoding/base64"
 	"encoding/hex"
 	"fmt"
+	"strings"
 )
 
 func IsValidHex(s string) bool {
@@ -11,6 +12,7 @@ func IsValidHex(s string) bool {
 	return err == nil
 }
 
+// HexToBase64 Converts a hex string to a base64 string
 func HexToBase64(h string) (string, error) {
 	// If no hex string has been provided, return an error
 	if !IsValidHex(h) {
@@ -26,35 +28,54 @@ func HexToBase64(h string) (string, error) {
 	return base64String, nil
 }
 
-func XORCombination(buffer1 string, buffer2 string) (string, error) {
+// HexToBytes Converts a hex string then to a byte slice
+func HexToBytes(h string) ([]byte, error) {
+	if !IsValidHex(h) {
+		return nil, fmt.Errorf("%s is not a valid hex string", h)
+	}
+	b, err := hex.DecodeString(h)
+	if err != nil {
+		return nil, fmt.Errorf("could not decode hex string: %v", err)
+	}
+	return b, nil
+}
+
+// XORCompareTwoHexStrings XORs two hex strings (of equal length) together, returning a hex string
+func XORCompareTwoHexStrings(buffer1 string, buffer2 string) (string, error) {
 	// The buffers have to be of equal length
 	if len(buffer1) != len(buffer2) {
-		return "", fmt.Errorf("Buffers are not of equal length")
+		return "", fmt.Errorf("buffers are not of equal length")
 	}
-	// Convert to base64 first
-	buffer1Base64, err := HexToBase64(buffer1)
+	bytes1, err := HexToBytes(buffer1)
 	if err != nil {
 		return "", err
 	}
-	buffer2Base64, err := HexToBase64(buffer2)
+	bytes2, err := HexToBytes(buffer2)
 	if err != nil {
 		return "", err
-	}
-	// Then to bytes
-	buffer1Bytes, err := base64.StdEncoding.DecodeString(buffer1Base64)
-	if err != nil {
-		return "", fmt.Errorf("invalid base64 string: %s", buffer1Base64)
-	}
-	buffer2Bytes, err := base64.StdEncoding.DecodeString(buffer2Base64)
-	if err != nil {
-		return "", fmt.Errorf("invalid base64 string: %s", buffer2Base64)
 	}
 	// Create a slice of the correct length to store the result
-	resultBytes := make([]byte, len(buffer1Bytes))
+	resultBytes := make([]byte, len(bytes1))
 	// Then perform the XOR operation on each byte, adding the result to the slice
-	for i := range buffer1Bytes {
-		resultBytes[i] = buffer1Bytes[i] ^ buffer2Bytes[i]
+	for i := range bytes1 {
+		resultBytes[i] = bytes1[i] ^ bytes2[i]
 	}
-	// Return the hex encoded result
 	return hex.EncodeToString(resultBytes), nil
+}
+
+var englishLetterFrequency = []rune("etaoinshrdlcumwfgypbvkjxqz") // Most common characters first
+
+// ScoreText scores a string based on the frequency of English characters
+func ScoreText(text string) int {
+	score := 0
+	for _, char := range strings.ToLower(text) {
+		for i, freqChar := range englishLetterFrequency {
+			if char == freqChar {
+				// We subtract the index from the length so that more frequent letters have a higher score
+				score += len(englishLetterFrequency) - i
+				break
+			}
+		}
+	}
+	return score
 }
