@@ -4,6 +4,7 @@ import (
 	"encoding/base64"
 	"encoding/hex"
 	"fmt"
+	"sort"
 	"strings"
 )
 
@@ -61,6 +62,46 @@ func XORCompareTwoHexStrings(buffer1 string, buffer2 string) (string, error) {
 		resultBytes[i] = bytes1[i] ^ bytes2[i]
 	}
 	return hex.EncodeToString(resultBytes), nil
+}
+
+type Result struct {
+	Character string
+	Score int
+	Text string
+}
+
+// SingleCharacterXOR XORs a string against a list of single characters, returning the highest scoring result
+func SingleCharacterXOR(inputHex string) (Result, error) {
+	inputBytes, err := HexToBytes(inputHex)
+	if err != nil {
+		fmt.Println(err)
+		return Result{}, err
+	}
+
+	//Interesting: the lowercase letters return the same as the uppercase letters but with invalid characters instead of spaces
+	chars := "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+	results := make([]Result, len(chars))
+
+	for charIndex, charRune := range chars {
+		x := make([]byte, len(inputBytes))
+		for i := range inputBytes {
+			x[i] = inputBytes[i] ^ byte(charRune) // charRune is of type rune, so we need to cast it to byte
+		}
+		results[charIndex] = Result{
+			Character: string(charRune),
+			Score:     ScoreText(string(x)),
+			Text:      string(x),
+		}
+	}
+
+	// Sort the results so the highest scoring is first
+	sort.Slice(results, func(i, j int) bool {
+		return results[i].Score > results[j].Score
+	})
+
+	// Return the top scoring result
+	return results[0], nil
+
 }
 
 // Note the use of a space at the beginning of the string - in Challenge 3, this made a big difference
