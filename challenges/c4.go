@@ -3,7 +3,7 @@ package challenges
 import (
 	"cryptomasters/helpers"
 	"fmt"
-	"io/ioutil"
+	"os"
 	"sort"
 	"strings"
 )
@@ -12,7 +12,7 @@ import (
 A hex-encoded string has been XOR'd against a single character. Find the key, decrypt the message.
 */
 func Challenge4() {
-	content, error := ioutil.ReadFile("assets/strings.txt")
+	content, error := os.ReadFile("assets/strings.txt")
 	if error != nil {
 		fmt.Println(error)
 	}
