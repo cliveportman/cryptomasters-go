@@ -66,8 +66,8 @@ func XORCompareTwoHexStrings(buffer1 string, buffer2 string) (string, error) {
 
 type Result struct {
 	Character string
-	Score int
-	Text string
+	Score     int
+	Text      string
 }
 
 // SingleCharacterXOR XORs a string against a list of single characters, returning the highest scoring result
@@ -106,7 +106,7 @@ func SingleCharacterXOR(inputHex string) (Result, error) {
 
 // Note the use of a space at the beginning of the string - in Challenge 3, this made a big difference
 var englishLetterFrequency = []rune(" etaoinshrdlcumwfgypbvkjxqz") // Most common characters first
-var challenge3HintFrequency = []rune("ETAOIN SHRDLU") // The hint text... which returns the same result. Feels like cheating.
+var challenge3HintFrequency = []rune("ETAOIN SHRDLU")              // The hint text... which returns the same result. Feels like cheating.
 
 // ScoreText scores a string based on the frequency of English characters
 func ScoreText(text string) int {

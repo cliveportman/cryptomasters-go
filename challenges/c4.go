@@ -5,13 +5,12 @@ import (
 	"fmt"
 	"io/ioutil"
 	"sort"
-	"strconv"
 	"strings"
 )
 
 /*
 A hex-encoded string has been XOR'd against a single character. Find the key, decrypt the message.
- */
+*/
 func Challenge4() {
 	content, error := ioutil.ReadFile("assets/strings.txt")
 	if error != nil {
@@ -22,7 +21,6 @@ func Challenge4() {
 	for i, line := range lines {
 		lines[i] = strings.TrimSpace(line)
 	}
-	fmt.Println(strconv.Itoa(len(lines)))
 
 	results := make([]helpers.Result, len(lines))
 	for i, line := range lines {
@@ -41,5 +39,5 @@ func Challenge4() {
 	//for _, res := range results {
 	//	fmt.Printf("Char: %c, Score: %d, Text: %s\n", res.Character, res.Score, res.Text)
 	//}
-	fmt.Printf("Char: %c, Score: %d, Text: %s\n", results[0].Character, results[0].Score, results[0].Text)
+	fmt.Printf("Char: %s, Score: %d, Text: %s\n", results[0].Character, results[0].Score, results[0].Text)
 }
