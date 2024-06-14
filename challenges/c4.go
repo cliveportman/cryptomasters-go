@@ -9,7 +9,7 @@ import (
 )
 
 /*
-A hex-encoded string has been XOR'd against a single character. Find the key, decrypt the message.
+A text file containing a number of strings is given. One of the strings has been encrypted using single-character XOR. Find it.
 */
 func Challenge4() {
 	content, error := os.ReadFile("assets/strings.txt")
@@ -24,7 +24,6 @@ func Challenge4() {
 
 	results := make([]helpers.Result, len(lines))
 	for i, line := range lines {
-		//fmt.Println(strconv.Itoa(i) + ":" +line)
 		result, error := helpers.SingleCharacterXOR(line)
 		if error != nil {
 			fmt.Println(error)
@@ -36,8 +35,5 @@ func Challenge4() {
 		return results[i].Score > results[j].Score
 	})
 
-	//for _, res := range results {
-	//	fmt.Printf("Char: %c, Score: %d, Text: %s\n", res.Character, res.Score, res.Text)
-	//}
 	fmt.Printf("Char: %s, Score: %d, Text: %s\n", results[0].Character, results[0].Score, results[0].Text)
 }

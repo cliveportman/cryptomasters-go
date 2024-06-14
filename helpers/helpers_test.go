@@ -6,14 +6,14 @@ import (
 
 func TestIsValidHex(t *testing.T) {
 	hexString := "49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d"
-	if !IsValidHex(hexString) {
+	if !isValidHex(hexString) {
 		t.Error("Expected true, got false")
 	}
 }
 
 func TestHexToBase64(t *testing.T) {
 	hexString := "49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d"
-	base64String, err := HexToBase64(hexString)
+	base64String, err := hexToBase64(hexString)
 	if err != nil {
 		t.Error(err)
 	}
@@ -26,7 +26,7 @@ func TestXORCombinationWith2EqualLengthStrings(t *testing.T) {
 	hexString1 := "1c0111001f010100061a024b53535009181c"
 	hexString2 := "686974207468652062756c6c277320657965"
 	expected := "746865206b696420646f6e277420706c6179"
-	result, err := XORCompareTwoHexStrings(hexString1, hexString2)
+	result, err := TwoStringsXOR(hexString1, hexString2)
 	if err != nil {
 		t.Error(err)
 	}
@@ -38,8 +38,8 @@ func TestXORCombinationWith2EqualLengthStrings(t *testing.T) {
 func TestScoreText(t *testing.T) {
 	text1 := "Some random sentence"
 	text2 := "adlna!e;oHFHFHw;d;ws"
-	score1 := ScoreText(text1)
-	score2 := ScoreText(text2)
+	score1 := scoreText(text1)
+	score2 := scoreText(text2)
 	if score1 <= score2 {
 		t.Error("Expected score1 to be higher than score2")
 	}
