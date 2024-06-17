@@ -15,5 +15,5 @@ func Challenge3() {
 		fmt.Println(error)
 		return
 	}
-	fmt.Printf("###########\nChar: %s\nScore: %d\nText: %s\n", result.Character, result.Score, result.Text)
+	fmt.Printf("Char: %s, Score: %d, Text: %s\n", result.Character, result.Score, result.Text)
 }

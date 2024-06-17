@@ -37,6 +37,11 @@ func hexToBase64(h string) (string, error) {
 	return base64String, nil
 }
 
+// StringToBytes Converts a string to a slice of bytes
+func StringToBytes(s string) []byte {
+	return []byte(s)
+}
+
 // ScoreText scores a string based on the frequency of English characters
 func scoreText(text string) int {
 	score := 0
@@ -51,6 +56,25 @@ func scoreText(text string) int {
 	}
 	return score
 }
+
+// Create key from repeating string
+func CreateKeyForRepeatingKeyXOR(key string, length int) string {
+	var result string
+	for len(result) < length {
+		result += key
+	}
+	return result[:length]
+}
+
+// func CreateKeyForRepeatingKeyXOR(key string, length int) []byte {
+// 	keyBytes := StringToBytes(key)
+// 	keyLength := len(keyBytes)
+// 	result := make([]byte, length)
+// 	for i := 0; i < length; i++ {
+// 		result[i] = keyBytes[i%keyLength]
+// 	}
+// 	return result
+// }
 
 // TwoStringsXOR XORs two hex strings (of equal length) together, returning a hex string
 func TwoStringsXOR(buffer1 string, buffer2 string) (string, error) {

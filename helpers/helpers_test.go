@@ -44,3 +44,13 @@ func TestScoreText(t *testing.T) {
 		t.Error("Expected score1 to be higher than score2")
 	}
 }
+
+func TestCreateKeyForRepeatingKeyXOR(t *testing.T) {
+	key := "QUACK"
+	length := 10
+	expected := "QUACKQUACK"
+	result := CreateKeyForRepeatingKeyXOR(key, length)
+	if result != expected {
+		t.Error("Expected QUACKQUACK, got", result)
+	}
+}

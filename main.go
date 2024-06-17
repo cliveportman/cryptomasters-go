@@ -5,5 +5,7 @@ import (
 )
 
 func main() {
-	challenges.Challenge4()
+	// challenges.Challenge3()
+	// challenges.Challenge4()
+	challenges.Challenge5()
 }
