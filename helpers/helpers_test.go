@@ -22,6 +22,16 @@ func TestHexToBase64(t *testing.T) {
 	}
 }
 
+func TestSplitStringIntoLines(t *testing.T) {
+	text := "abcdefghijklmnopqrstuvwxyz"
+	expected := "abcdefghij\nklmnopqrst\nuvwxyz"
+	result := SplitStringIntoLines(text, 10)
+	if result != expected {
+		t.Error("Expected:\nabcdefghij\nklmnopqrst\nuvwxyz\n, got:\n", result)
+	}
+	
+}
+
 func TestXORCombinationWith2EqualLengthStrings(t *testing.T) {
 	hexString1 := "1c0111001f010100061a024b53535009181c"
 	hexString2 := "686974207468652062756c6c277320657965"
