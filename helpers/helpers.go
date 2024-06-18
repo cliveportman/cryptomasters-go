@@ -42,6 +42,18 @@ func StringToBytes(s string) []byte {
 	return []byte(s)
 }
 
+// SplitStringIntoLines Splits a string into lines of a specified length
+func SplitStringIntoLines(s string, lineLength int) string {
+	var result strings.Builder
+	for i, char := range s {
+		if i%lineLength == 0 && i != 0 {
+			result.WriteString("\n")
+		}
+		result.WriteRune(char)
+	}
+	return result.String()
+}
+
 // ScoreText scores a string based on the frequency of English characters
 func scoreText(text string) int {
 	score := 0
