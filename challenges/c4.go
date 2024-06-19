@@ -12,7 +12,7 @@ import (
 A text file containing a number of strings is given. One of the strings has been encrypted using single-character XOR. Find it.
 */
 func Challenge4() {
-	content, error := os.ReadFile("assets/strings.txt")
+	content, error := os.ReadFile("assets/c4.txt")
 	if error != nil {
 		fmt.Println(error)
 	}

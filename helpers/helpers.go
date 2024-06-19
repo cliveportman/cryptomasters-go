@@ -4,6 +4,7 @@ import (
 	"encoding/base64"
 	"encoding/hex"
 	"fmt"
+	"regexp"
 	"sort"
 	"strings"
 )
@@ -11,6 +12,11 @@ import (
 func isValidHex(s string) bool {
 	_, err := hex.DecodeString(s)
 	return err == nil
+}
+
+func isValidBase64(s string) bool {
+    re := regexp.MustCompile(`^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$`)
+    return re.MatchString(s)
 }
 
 // HexToBytes Converts a hex string to a slice of bytes
@@ -136,4 +142,39 @@ func SingleCharacterXOR(inputHex string) (Result, error) {
 	// Return the top scoring result
 	return results[0], nil
 
+}
+
+// func HammingDifference(text1 string, text2 string) (int, error) {
+// 	if len(text1) != len(text2) {
+// 		return 0, fmt.Errorf("texts are not of equal length")
+// 	}
+// 	bytes1 := StringToBytes(text1)
+// 	bytes2 := StringToBytes(text2)
+// 	var result int
+// 	for i := range bytes1 {
+// 		// XOR the two bytes together, e.g. 1101001 ^ 1101011 = 10
+// 		xor := bytes1[i] ^ bytes2[i]
+// 		// Count the number of bits set in the XOR result, e.g. 10 = 1, 1101 = 3
+// 		for xor > 0 {
+// 			result += int(xor & 1) // If it's 1, add 1 to the result
+// 			xor >>= 1 // Right shift the bits by 1
+// 		}		
+// 	}
+// 	return result, nil
+// }
+func HammingDifference(bytes1 []byte, bytes2 []byte) (int, error) {
+	if len(bytes1) != len(bytes2) {
+		return 0, fmt.Errorf("texts are not of equal length")
+	}
+	var result int
+	for i := range bytes1 {
+		// XOR the two bytes together, e.g. 1101001 ^ 1101011 = 10
+		xor := bytes1[i] ^ bytes2[i]
+		// Count the number of bits set in the XOR result, e.g. 10 = 1, 1101 = 3
+		for xor > 0 {
+			result += int(xor & 1) // If it's 1, add 1 to the result
+			xor >>= 1 // Right shift the bits by 1
+		}		
+	}
+	return result, nil
 }

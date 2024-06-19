@@ -64,3 +64,16 @@ func TestCreateKeyForRepeatingKeyXOR(t *testing.T) {
 		t.Error("Expected QUACKQUACK, got", result)
 	}
 }
+
+func TestHammingDifference(t *testing.T) {
+	text1 := "this is a test"
+	text2 := "wokka wokka!!!"
+	expected := 37
+	result, err := HammingDifference(text1, text2)
+	if err != nil {
+		t.Error(err)
+	}
+	if result != expected {
+		t.Error("Expected 37, got", result)
+	}
+}
