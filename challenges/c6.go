@@ -2,7 +2,6 @@ package challenges
 
 import (
 	"cryptomasters/helpers"
-	"encoding/base64"
 	"fmt"
 	"os"
 	"strings"
@@ -16,6 +15,11 @@ func Challenge6() {
 	if error != nil {
 		fmt.Println(error)
 	}
+
+	content = []byte(strings.ReplaceAll(string(content), "\n", ""))
+	
+
+
 	lines := strings.Split(string(content), "\n")
 	for i, line := range lines {
 		lines[i] = strings.TrimSpace(line)
@@ -32,21 +36,23 @@ func Challenge6() {
 	// We're trying to find the keysize and using possible values of 2 to 40
 	for i := 2; i < 41; i++ {
 		// We're taking the first two blocks of size i
-		block1 := lines[0][:i]
-		block2 := lines[0][i:i*2]
-		bytes1, err := base64.StdEncoding.DecodeString(block1)
-		if err != nil {
-			fmt.Println(err)
-		}
-		bytes2, err := base64.StdEncoding.DecodeString(block2)
-		if err != nil {
-			fmt.Println(err)
-		}
+		block1 := content[:i]
+		block2 := content[i:i*2]
+		// bytes1, err := base64.StdEncoding.DecodeString(block1)
+		// if err != nil {
+		// 	fmt.Println(err)
+		// }
+		// bytes2, err := base64.StdEncoding.DecodeString(block2)
+		// if err != nil {
+		// 	fmt.Println(err)
+		// }
 		// We're calculating the hamming distance between the two blocks
-		result, err := helpers.HammingDifference(bytes1, bytes2)
+		result, err := helpers.HammingDifference(block1, block2)
 		if err != nil {
 			fmt.Println(err)
 		}
-		fmt.Printf("Hamming difference between %s and %s is %d\n", bytes1, bytes2, result)
+		// return the average hamming distance as a float
+		average := float64(result)/float64(i)
+		fmt.Printf("Hamming difference is %f\n",average)
 	}
 }
