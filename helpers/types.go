@@ -5,3 +5,8 @@ type Result struct {
 	Score     int
 	Text      string
 }
+
+type HammingDistanceResult struct {
+	KeySize int
+	Score   float64
+}
