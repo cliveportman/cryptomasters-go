@@ -39,4 +39,30 @@ func Challenge6() {
 		return results[i].Score < results[j].Score
 	})
 	fmt.Printf("Keysize: %d, Hamming difference: %f\n", results[0].KeySize, results[0].Score)
+	keySize := results[0].KeySize
+
+	// Break the content into blocks of keySize
+	var blocks [][]byte
+	for i := 0; i < len(content); i += keySize {
+		end := i + keySize
+		if end > len(content) {
+			end = len(content)
+		}
+		blocks = append(blocks, content[i:end])
+	}
+	// Transpose the blocks. We'll end up with a slice of length keysize, each item of which is a slice of length len(blocks)
+	transposedBlocks := make([][]byte, keySize)
+	for i := 0; i < keySize; i++ {
+		for _, block := range blocks {
+			if i < len(block) { // Check if the block is long enough
+				transposedBlocks[i] = append(transposedBlocks[i], block[i])
+			}
+		}
+	}
+	fmt.Println(len(blocks))
+	fmt.Println(len(transposedBlocks))
+	fmt.Println(len(transposedBlocks[0]))
 }
+
+
+
