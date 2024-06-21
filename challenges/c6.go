@@ -51,14 +51,36 @@ func Challenge6() {
 		blocks = append(blocks, content[i:end])
 	}
 	// Transpose the blocks. We'll end up with a slice of length keysize, each item of which is a slice of length len(blocks)
+	// transposedBlocks := make([][]byte, keySize)
+	// // Loop through the keysize
+	// for i := 0; i < keySize; i++ {
+	// 	// Loop through the blocks
+	// 	for _, block := range blocks {
+	// 		// If the keysize is less than the length of the block
+	// 		if i < len(block) { // Check if the block is long enough
+	// 			transposedBlocks[i] = append(transposedBlocks[i], block[i])
+	// 		} else {
+	// 			continue
+	// 		}
+	// 	}
+	// }
 	transposedBlocks := make([][]byte, keySize)
-	for i := 0; i < keySize; i++ {
-		for _, block := range blocks {
-			if i < len(block) { // Check if the block is long enough
-				transposedBlocks[i] = append(transposedBlocks[i], block[i])
-			}
-		}
-	}
+for i := 0; i < keySize; i++ {
+    // For performance, we want the transposedBlocks[i] slice to be preallocated with the exact size needed = reduced number of memory allocations
+    count := 0
+    for _, block := range blocks {
+        if i < len(block) {
+            count++
+        }
+    }
+    // Preallocate the slice with the exact size needed
+    transposedBlocks[i] = make([]byte, 0, count)
+    for _, block := range blocks {
+        if i < len(block) {
+            transposedBlocks[i] = append(transposedBlocks[i], block[i])
+        }
+    }
+}
 	fmt.Println(len(blocks))
 	fmt.Println(len(transposedBlocks))
 	fmt.Println(len(transposedBlocks[0]))
