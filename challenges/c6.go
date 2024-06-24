@@ -73,6 +73,20 @@ func Challenge6() {
 		}
 
 	}
+	// Create an empty slice to hold the key, then populate it with the highest scoring character from each block
+	keyBase64 := []string{}
+	for _, XORResult := range XORresults {
+		keyBase64 = append(keyBase64, XORResult.Character)
+		//fmt.Printf("Char: %s, Score: %d, Text: %s\n", XORResult.Character, XORResult.Score, XORResult.Text)
+	}
+	// Converting the key to bytes
+	keyBytes := [][]byte{}
+	for i, key := range keyBase64 {
+		keyBytes = append(keyBytes, []byte(key))
+		fmt.Printf("%d: %b or %s\n", i, keyBytes[i], keyBytes[i])
+	}
+	// for i, key := range keyBytes {
+	// 	fmt.Printf("%d: %b or %s\n", i, key, key)
+	// }
 
-	fmt.Println(XORresults)
 }
