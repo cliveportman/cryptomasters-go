@@ -24,15 +24,15 @@ func Challenge6() {
 	for keysize := 2; keysize < 41; keysize++ {
 		// Take the first two blocks of keysize length
 		block1 := content[:keysize]
-		block2 := content[keysize:keysize*2]
+		block2 := content[keysize : keysize*2]
 		// And calculate the hamming difference
 		result, err := helpers.HammingDifference(block1, block2)
 		if err != nil {
 			fmt.Println(err)
 		}
 		// Normalise them by dividing by the keysize (converting to float for greater accuracy)
-		average := float64(result)/float64(keysize)
-		results = append(results, helpers.HammingDistanceResult{KeySize: keysize, Score: average})		
+		average := float64(result) / float64(keysize)
+		results = append(results, helpers.HammingDistanceResult{KeySize: keysize, Score: average})
 	}
 	// Sort the results so the lowest Hamming difference is top and print that
 	sort.Slice(results, func(i, j int) bool {
@@ -51,40 +51,28 @@ func Challenge6() {
 		blocks = append(blocks, content[i:end])
 	}
 	// Transpose the blocks. We'll end up with a slice of length keysize, each item of which is a slice of length len(blocks)
-	// transposedBlocks := make([][]byte, keySize)
-	// // Loop through the keysize
-	// for i := 0; i < keySize; i++ {
-	// 	// Loop through the blocks
-	// 	for _, block := range blocks {
-	// 		// If the keysize is less than the length of the block
-	// 		if i < len(block) { // Check if the block is long enough
-	// 			transposedBlocks[i] = append(transposedBlocks[i], block[i])
-	// 		} else {
-	// 			continue
-	// 		}
-	// 	}
-	// }
 	transposedBlocks := make([][]byte, keySize)
-for i := 0; i < keySize; i++ {
-    // For performance, we want the transposedBlocks[i] slice to be preallocated with the exact size needed = reduced number of memory allocations
-    count := 0
-    for _, block := range blocks {
-        if i < len(block) {
-            count++
-        }
-    }
-    // Preallocate the slice with the exact size needed
-    transposedBlocks[i] = make([]byte, 0, count)
-    for _, block := range blocks {
-        if i < len(block) {
-            transposedBlocks[i] = append(transposedBlocks[i], block[i])
-        }
-    }
+	// Loop through the keysize
+	for i := 0; i < keySize; i++ {
+		// Loop through the blocks
+		for _, block := range blocks {
+			// If the keysize is less than the length of the block
+			if i < len(block) { // Check if the block is long enough
+				transposedBlocks[i] = append(transposedBlocks[i], block[i])
+			}
+		}
+	}
+	// XOR through each block, returning the highest scoring result
+	XORresults := make([]helpers.Result, len(transposedBlocks))
+	for i, block := range transposedBlocks {
+		result, error := helpers.SingleCharacterXORBytes(block)
+		if error != nil {
+			fmt.Println(error)
+		} else {
+			XORresults[i] = result
+		}
+
+	}
+
+	fmt.Println(XORresults)
 }
-	fmt.Println(len(blocks))
-	fmt.Println(len(transposedBlocks))
-	fmt.Println(len(transposedBlocks[0]))
-}
-
-
-
