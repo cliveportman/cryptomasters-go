@@ -43,6 +43,14 @@ func hexToBase64(h string) (string, error) {
 	return base64String, nil
 }
 
+func HexToString(h string) (string, error) {
+	bytes, err := hexToBytes(h)
+	if err != nil {
+		return "", err
+	}
+	return string(bytes), nil
+}
+
 // StringToBytes Converts a string to a slice of bytes
 func StringToBytes(s string) []byte {
 	return []byte(s)

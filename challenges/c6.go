@@ -2,6 +2,7 @@ package challenges
 
 import (
 	"cryptomasters/helpers"
+	"encoding/hex"
 	"fmt"
 	"os"
 	"sort"
@@ -9,7 +10,7 @@ import (
 )
 
 /*
-Provided with a string of text, convert it to bytes, then encrypt it using a repeating key XOR.
+Provided with a file containing encoded text, find the key and decrypt it.
 */
 func Challenge6() {
 	content, error := os.ReadFile("assets/c4.txt")
@@ -36,9 +37,15 @@ func Challenge6() {
 	}
 	// Sort the results so the lowest Hamming difference is top and print that
 	sort.Slice(results, func(i, j int) bool {
+
 		return results[i].Score < results[j].Score
 	})
-	fmt.Printf("Keysize: %d, Hamming difference: %f\n", results[0].KeySize, results[0].Score)
+	for _, result := range results {
+		fmt.Printf("Keysize: %d, Hamming difference: %f\n", result.KeySize, result.Score)
+	}
+	// fmt.Printf("Keysize: %d, Hamming difference: %f\n", results[0].KeySize, results[0].Score)
+	// fmt.Printf("Keysize: %d, Hamming difference: %f\n", results[1].KeySize, results[1].Score)
+	// fmt.Printf("Keysize: %d, Hamming difference: %f\n", results[2].KeySize, results[2].Score)
 	keySize := results[0].KeySize
 
 	// Break the content into blocks of keySize
@@ -57,7 +64,7 @@ func Challenge6() {
 		// Loop through the blocks
 		for _, block := range blocks {
 			// If the keysize is less than the length of the block
-			if i < len(block) { // Check if the block is long enough
+			if i < len(block) {
 				transposedBlocks[i] = append(transposedBlocks[i], block[i])
 			}
 		}
@@ -74,17 +81,37 @@ func Challenge6() {
 
 	}
 	// Create an empty slice to hold the key, then populate it with the highest scoring character from each block
+	// We could also just create a string and append the character to it, but we'll only need to slice it to bytes later
 	keyBase64 := []string{}
 	for _, XORResult := range XORresults {
 		keyBase64 = append(keyBase64, XORResult.Character)
 		//fmt.Printf("Char: %s, Score: %d, Text: %s\n", XORResult.Character, XORResult.Score, XORResult.Text)
 	}
-	// Converting the key to bytes
-	keyBytes := [][]byte{}
-	for i, key := range keyBase64 {
-		keyBytes = append(keyBytes, []byte(key))
-		fmt.Printf("%d: %b or %s\n", i, keyBytes[i], keyBytes[i])
+	textHex := hex.EncodeToString([]byte(content))
+	keyString := strings.Join(keyBase64, "")
+	repeatingKey := helpers.CreateKeyForRepeatingKeyXOR(keyString, len(content))
+	repeatingKeyHex := hex.EncodeToString([]byte(repeatingKey))
+	result, error := helpers.TwoStringsXOR(textHex, repeatingKeyHex)
+	if error != nil {
+		fmt.Println(error)
+		return
 	}
+	helpers.SplitStringIntoLines(result, 75)
+	// stringResult, error := helpers.HexToString(result)
+	// if error != nil {
+	// 	fmt.Println(error)
+	// }
+	// fmt.Println(stringResult)
+
+	// fmt.Println(helpers.HexToString(result)
+	// fmt.Println(keyString)
+
+	// Converting the key to bytes
+	// keyBytes := [][]byte{}
+	// for i, key := range keyBase64 {
+	// 	keyBytes = append(keyBytes, []byte(key))
+	// 	fmt.Printf("%d: %b or %s\n", i, keyBytes[i], keyBytes[i])
+	// }
 	// for i, key := range keyBytes {
 	// 	fmt.Printf("%d: %b or %s\n", i, key, key)
 	// }
