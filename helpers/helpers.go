@@ -176,7 +176,7 @@ func SingleCharacterXORBytes(b []byte) (Result, error) {
 
 }
 
-//	func HammingDifference(text1 string, text2 string) (int, error) {
+//	func HammingDifferenceStrings(text1 string, text2 string) (int, error) {
 //		if len(text1) != len(text2) {
 //			return 0, fmt.Errorf("texts are not of equal length")
 //		}
@@ -200,13 +200,18 @@ func HammingDifference(bytes1 []byte, bytes2 []byte) (int, error) {
 	}
 	var result int
 	for i := range bytes1 {
+		fmt.Printf("bytes1[%d]: %08b, bytes2[%d]: %08b = ", i, bytes1[i], i, bytes2[i])
+		
+
 		// XOR the two bytes together, e.g. 1101001 ^ 1101011 = 10
 		xor := bytes1[i] ^ bytes2[i]
+		fmt.Printf("%08b\n", xor)
 		// Count the number of bits set in the XOR result, e.g. 10 = 1, 1101 = 3
 		for xor > 0 {
 			result += int(xor & 1) // If it's 1, add 1 to the result
 			xor >>= 1              // Right shift the bits by 1
 		}
 	}
+	println(result)
 	return result, nil
 }

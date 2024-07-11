@@ -9,4 +9,6 @@ type Result struct {
 type HammingDistanceResult struct {
 	KeySize int
 	Score   float64
+	Bytes1  []byte
+	Bytes2  []byte
 }

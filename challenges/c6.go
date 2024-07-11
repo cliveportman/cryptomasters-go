@@ -22,18 +22,38 @@ func Challenge6() {
 	content = []byte(strings.ReplaceAll(string(content), "\n", ""))
 	results := []helpers.HammingDistanceResult{}
 	// Trying key sizes from 2 to 40 - the key size producing the lowest Hamming distance is likely to be the actual key size
-	for keysize := 2; keysize < 41; keysize++ {
+	for keysize := 2; keysize < 3; keysize++ {
 		// Take the first two blocks of keysize length
 		block1 := content[:keysize]
 		block2 := content[keysize : keysize*2]
+		block3 := content[keysize*2 : keysize*3]
+		block4 := content[keysize*3 : keysize*4]
 		// And calculate the hamming difference
-		result, err := helpers.HammingDifference(block1, block2)
+		result1and2, err := helpers.HammingDifference(block1, block2)
 		if err != nil {
 			fmt.Println(err)
 		}
+		result1and3, err := helpers.HammingDifference(block1, block3)
+		if err != nil {
+			fmt.Println(err)
+		}
+		result1and4, err := helpers.HammingDifference(block1, block4)
+		if err != nil {
+			fmt.Println(err)
+		}
+		result2and3, err := helpers.HammingDifference(block2, block3)
+		if err != nil {
+			fmt.Println(err)
+		}
+		result3and4, err := helpers.HammingDifference(block3, block4)
+		if err != nil {
+			fmt.Println(err)
+		}
+		fmt.Printf("%d: %d, %d, %d, %d, %d\n", keysize, result1and2, result1and3, result1and4, result2and3, result3and4)
 		// Normalise them by dividing by the keysize (converting to float for greater accuracy)
-		average := float64(result) / float64(keysize)
-		results = append(results, helpers.HammingDistanceResult{KeySize: keysize, Score: average})
+		average := float64(result1and2+result1and3+result1and4+result2and3+result3and4) / 5
+		normalised := float64(average) / float64(keysize)
+		results = append(results, helpers.HammingDistanceResult{KeySize: keysize, Score: normalised, Bytes1: block1, Bytes2: block2})
 	}
 	// Sort the results so the lowest Hamming difference is top and print that
 	sort.Slice(results, func(i, j int) bool {
@@ -41,7 +61,7 @@ func Challenge6() {
 		return results[i].Score < results[j].Score
 	})
 	for _, result := range results {
-		fmt.Printf("Keysize: %d, Hamming difference: %f\n", result.KeySize, result.Score)
+		fmt.Printf("Keysize: %d, Hamming difference: %f\n%b\n%b\n\n", result.KeySize, result.Score, result.Bytes1, result.Bytes2)
 	}
 	// fmt.Printf("Keysize: %d, Hamming difference: %f\n", results[0].KeySize, results[0].Score)
 	// fmt.Printf("Keysize: %d, Hamming difference: %f\n", results[1].KeySize, results[1].Score)
